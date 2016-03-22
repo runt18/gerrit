@@ -23,7 +23,7 @@ def print_help():
     if not n.startswith("__") and not n in ['help', 'reload'] \
        and str(type(v)) != "<type 'javapackage'>"             \
        and not str(v).startswith("<module"):
-       print "\"%s\" is \"%s\"" % (n, v)
+       print "\"{0!s}\" is \"{1!s}\"".format(n, v)
   print
   print "Welcome to the Gerrit Inspector"
   print "Enter help() to see the above again, EOF to quit and stop Gerrit"

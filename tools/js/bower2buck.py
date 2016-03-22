@@ -64,8 +64,7 @@ include_defs('//lib/js.defs')
 
 
 def usage():
-  print(('Usage: %s -o <outfile> [//path/to:bower_components_rule...]'
-         % sys.argv[0]),
+  print(('Usage: {0!s} -o <outfile> [//path/to:bower_components_rule...]'.format(sys.argv[0])),
         file=sys.stderr)
   return 1
 
@@ -83,24 +82,24 @@ class Rule(object):
 
   def to_rule(self, packages):
     if self.name not in packages:
-      raise ValueError('No package name found for %s' % self.name)
+      raise ValueError('No package name found for {0!s}'.format(self.name))
 
     lines = [
         'bower_component(',
-        "  name = '%s'," % self.name,
-        "  package = '%s'," % packages[self.name],
-        "  version = '%s'," % self.version,
+        "  name = '{0!s}',".format(self.name),
+        "  package = '{0!s}',".format(packages[self.name]),
+        "  version = '{0!s}',".format(self.version),
         ]
     if self.deps:
       if len(self.deps) == 1:
-        lines.append("  deps = [':%s']," % next(self.deps.iterkeys()))
+        lines.append("  deps = [':{0!s}'],".format(next(self.deps.iterkeys())))
       else:
         lines.append('  deps = [')
-        lines.extend("    ':%s'," % d for d in sorted(self.deps.iterkeys()))
+        lines.extend("    ':{0!s}',".format(d) for d in sorted(self.deps.iterkeys()))
         lines.append('  ],')
     lines.extend([
-        "  license = 'TODO: %s'," % self.license,
-        "  sha1 = '%s'," % self.sha1,
+        "  license = 'TODO: {0!s}',".format(self.license),
+        "  sha1 = '{0!s}',".format(self.sha1),
         ')'])
     return '\n'.join(lines)
 
@@ -115,7 +114,7 @@ def build_bower_json(targets, buck_out):
 
   deps = subprocess.check_output(
       ['buck', 'query', '-v', '0',
-       "filter('__download_bower', deps(%s))" % '+'.join(targets)],
+       "filter('__download_bower', deps({0!s}))".format('+'.join(targets))],
       env=BUCK_ENV)
   deps = deps.replace('__download_bower', '__bower_version').split()
   subprocess.check_call(['buck', 'build'] + deps, env=BUCK_ENV)
@@ -173,7 +172,7 @@ def collect_rules(packages):
       p = get_package_name(n, v)
       old = packages.get(n)
       if old is not None and old != p:
-        raise ValueError('multiple packages named %s: %s != %s' % (n, p, old))
+        raise ValueError('multiple packages named {0!s}: {1!s} != {2!s}'.format(n, p, old))
       packages[n] = p
 
   return rules
@@ -205,9 +204,9 @@ def main(args):
   with open(outfile, 'w') as f:
     f.write(HEADER)
     for _, r in sorted(rules.iteritems()):
-      f.write('\n\n%s' % r.to_rule(packages))
+      f.write('\n\n{0!s}'.format(r.to_rule(packages)))
 
-  print('Wrote bower_components rules to:\n  %s' % outfile)
+  print('Wrote bower_components rules to:\n  {0!s}'.format(outfile))
 
 
 if __name__ == '__main__':

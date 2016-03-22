@@ -67,12 +67,12 @@ def main(args):
   parts = tgz[:-len(suffix)].split('@')
 
   if not tgz.endswith(suffix) or len(parts) != 2:
-    print('usage: %s <path/to/npm_binary>' % sys.argv[0], file=sys.stderr)
+    print('usage: {0!s} <path/to/npm_binary>'.format(sys.argv[0]), file=sys.stderr)
     return 1
 
   name, version = parts
   sha1 = util.hash_file(hashlib.sha1(), path).hexdigest()
-  outdir = '%s-%s' % (path[:-len(suffix)], sha1)
+  outdir = '{0!s}-{1!s}'.format(path[:-len(suffix)], sha1)
   rel_bin = os.path.join('package', 'bin', name)
   bin = os.path.join(outdir, rel_bin)
   if not os.path.isfile(bin):

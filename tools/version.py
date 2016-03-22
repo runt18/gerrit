@@ -27,7 +27,7 @@ if not len(args):
 elif len(args) > 1:
   parser.error('too many arguments')
 
-DEST_PATTERN = r'\g<1>%s\g<3>' % args[0]
+DEST_PATTERN = r'\g<1>{0!s}\g<3>'.format(args[0])
 
 
 def replace_in_file(filename, src_pattern):
@@ -40,7 +40,7 @@ def replace_in_file(filename, src_pattern):
     f.write(s)
     f.close()
   except IOError as err:
-    print('error updating %s: %s' % (filename, err), file=sys.stderr)
+    print('error updating {0!s}: {1!s}'.format(filename, err), file=sys.stderr)
 
 
 src_pattern = re.compile(r'^(\s*<version>)([-.\w]+)(</version>\s*)$',
