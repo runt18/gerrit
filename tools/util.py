@@ -87,7 +87,7 @@ def hash_bower_component(hash_obj, path):
     The passed-in hash_obj.
   """
   if not os.path.isdir(path):
-    raise ValueError('Not a directory: %s' % path)
+    raise ValueError('Not a directory: {0!s}'.format(path))
 
   path = os.path.abspath(path)
   for root, dirs, files in os.walk(path):

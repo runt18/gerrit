@@ -43,12 +43,12 @@ def bundle_dependencies():
 
 def main(args):
   if len(args) != 2:
-    print('Usage: %s <package> <version>' % sys.argv[0], file=sys.stderr)
+    print('Usage: {0!s} <package> <version>'.format(sys.argv[0]), file=sys.stderr)
     return 1
 
   name, version = args
-  filename = '%s-%s.tgz' % (name, version)
-  url = 'http://registry.npmjs.org/%s/-/%s' % (name, filename)
+  filename = '{0!s}-{1!s}.tgz'.format(name, version)
+  url = 'http://registry.npmjs.org/{0!s}/-/{1!s}'.format(name, filename)
 
   tmpdir = tempfile.mkdtemp();
   tgz = os.path.join(tmpdir, filename)
@@ -57,7 +57,7 @@ def main(args):
   subprocess.check_call(['curl', '--proxy-anyauth', '-ksfo', tgz, url])
   with tarfile.open(tgz, 'r:gz') as tar:
     if is_bundled(tar):
-      print('%s already has bundled node_modules' % filename)
+      print('{0!s} already has bundled node_modules'.format(filename))
       return 1
     tar.extractall(path=tmpdir)
 

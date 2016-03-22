@@ -82,11 +82,11 @@ def gen_plugin_classpath(root):
     print("""\
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-  <classpathentry kind="src" path="src/main/java"/>%(testpath)s
+  <classpathentry kind="src" path="src/main/java"/>{testpath!s}
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
   <classpathentry combineaccessrules="false" kind="src" path="/gerrit"/>
   <classpathentry kind="output" path="eclipse-out/classes"/>
-</classpath>""" % {"testpath": testpath}, file=fd)
+</classpath>""".format(**{"testpath": testpath}), file=fd)
 
 def gen_classpath():
   def make_classpath():
@@ -196,7 +196,7 @@ def gen_classpath():
         gen_project(plugin.replace('plugins/', ""), plugindir)
         gen_plugin_classpath(plugindir)
       except (IOError, OSError) as err:
-        print('error generating project for %s: %s' % (plugin, err),
+        print('error generating project for {0!s}: {1!s}'.format(plugin, err),
               file=sys.stderr)
 
 def gen_factorypath():

@@ -39,13 +39,13 @@ KNOWN_PROVIDED_DEPS = [
 
 for target in args.targets:
   if not target.startswith('//'):
-    print('Target must be absolute: %s' % target, file=stderr)
+    print('Target must be absolute: {0!s}'.format(target), file=stderr)
 
 def parse_graph():
   graph = defaultdict(list)
   while not path.isfile('.buckconfig'):
     chdir('..')
-  query = ' + '.join('deps(%s)' % t for t in args.targets)
+  query = ' + '.join('deps({0!s})'.format(t) for t in args.targets)
   p = Popen([
       'buck', 'query', query,
       '--output-attributes=buck.direct_dependencies'], stdout=PIPE)
@@ -92,9 +92,9 @@ while queue:
 if do_not_distribute:
   print('DO_NOT_DISTRIBUTE license found', file=stderr)
   for target in args.targets:
-    print('...via %s:' % target)
+    print('...via {0!s}:'.format(target))
     Popen(['buck', 'query',
-           'allpaths(%s, //lib:LICENSE-DO_NOT_DISTRIBUTE)' % target],
+           'allpaths({0!s}, //lib:LICENSE-DO_NOT_DISTRIBUTE)'.format(target)],
           stdout=stderr).communicate()
   exit(1)
 
@@ -155,7 +155,7 @@ for n in used:
   name = n[len('//lib:LICENSE-'):]
   if args.asciidoc:
     print()
-    print('[[%s]]' % name.replace('.', '_'))
+    print('[[{0!s}]]'.format(name.replace('.', '_')))
     print(name)
     print('~' * len(name))
     print()

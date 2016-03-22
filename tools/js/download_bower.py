@@ -38,20 +38,20 @@ def bower_cmd(bower, *args):
 
 def bower_info(bower, name, package, version):
   cmd = bower_cmd(bower, '-l=error', '-j',
-                  'info', '%s#%s' % (package, version))
+                  'info', '{0!s}#{1!s}'.format(package, version))
   p = subprocess.Popen(cmd , stdout=subprocess.PIPE, stderr=subprocess.PIPE)
   out, err = p.communicate()
   if p.returncode:
     sys.stderr.write(err)
-    raise OSError('Command failed: %s' % cmd)
+    raise OSError('Command failed: {0!s}'.format(cmd))
 
   try:
     info = json.loads(out)
   except ValueError:
-    raise ValueError('invalid JSON from %s:\n%s' % (cmd, out))
+    raise ValueError('invalid JSON from {0!s}:\n{1!s}'.format(cmd, out))
   info_name = info.get('name')
   if info_name != name:
-    raise ValueError('expected package name %s, got: %s' % (name, info_name))
+    raise ValueError('expected package name {0!s}, got: {1!s}'.format(name, info_name))
   return info
 
 
@@ -70,8 +70,8 @@ def ignore_deps(info):
 
 def cache_entry(name, package, version, sha1):
   if not sha1:
-    sha1 = hashlib.sha1('%s#%s' % (package, version)).hexdigest()
-  return os.path.join(CACHE_DIR, '%s-%s.zip-%s' % (name, version, sha1))
+    sha1 = hashlib.sha1('{0!s}#{1!s}'.format(package, version)).hexdigest()
+  return os.path.join(CACHE_DIR, '{0!s}-{1!s}.zip-{2!s}'.format(name, version, sha1))
 
 
 def main(args):
@@ -92,7 +92,7 @@ def main(args):
     info = bower_info(opts.b, opts.n, opts.p, opts.v)
     ignore_deps(info)
     subprocess.check_call(
-        bower_cmd(opts.b, '--quiet', 'install', '%s#%s' % (opts.p, opts.v)))
+        bower_cmd(opts.b, '--quiet', 'install', '{0!s}#{1!s}'.format(opts.p, opts.v)))
     bc = os.path.join(cwd, 'bower_components')
     subprocess.check_call(
         ['zip', '-q', '--exclude', '.bower.json', '-r', cached, opts.n],
@@ -110,7 +110,7 @@ def main(args):
           os.remove(cached)
         except OSError as err:
           if path.exists(cached):
-            print('error removing %s: %s' % (cached, err), file=sys.stderr)
+            print('error removing {0!s}: {1!s}'.format(cached, err), file=sys.stderr)
         return 1
 
   shutil.copyfile(cached, outzip)

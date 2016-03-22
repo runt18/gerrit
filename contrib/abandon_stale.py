@@ -106,8 +106,7 @@ def _main():
     if not match:
         logging.error("Invalid age: %s", options.age)
         return 1
-    message = "Abandoning after %s %s or more of inactivity." % \
-        (match.group(1), match.group(2))
+    message = "Abandoning after {0!s} {1!s} or more of inactivity.".format(match.group(1), match.group(2))
 
     if options.basic_auth:
         auth_type = HTTPBasicAuthFromNetrc
@@ -126,14 +125,14 @@ def _main():
         stale_changes = []
         offset = 0
         step = 500
-        query_terms = ["status:new", "age:%s" % options.age] + \
-                      ["-branch:%s" % b for b in options.exclude_branches] + \
-                      ["-project:%s" % p for p in options.exclude_projects]
+        query_terms = ["status:new", "age:{0!s}".format(options.age)] + \
+                      ["-branch:{0!s}".format(b) for b in options.exclude_branches] + \
+                      ["-project:{0!s}".format(p) for p in options.exclude_projects]
         if options.owner:
-            query_terms += ["owner:%s" % options.owner]
+            query_terms += ["owner:{0!s}".format(options.owner)]
         query = "%20".join(query_terms)
         while True:
-            q = query + "&n=%d&S=%d" % (step, offset)
+            q = query + "&n={0:d}&S={1:d}".format(step, offset)
             logging.debug("Query: %s", q)
             url = "/changes/?q=" + q
             result = gerrit.get(url)
@@ -172,7 +171,7 @@ def _main():
 
         try:
             gerrit.post("/changes/" + change_id + "/abandon",
-                        data='{"message" : "%s"}' % abandon_message)
+                        data='{{"message" : "{0!s}"}}'.format(abandon_message))
             abandoned += 1
         except Exception as e:
             errors += 1

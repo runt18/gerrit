@@ -10,7 +10,7 @@ import sys
 SSH_USER = 'bot'
 SSH_HOST = 'localhost'
 SSH_PORT = 29418
-SSH_COMMAND = 'ssh %s@%s -p %d gerrit approve ' % (SSH_USER, SSH_HOST, SSH_PORT)
+SSH_COMMAND = 'ssh {0!s}@{1!s} -p {2:d} gerrit approve '.format(SSH_USER, SSH_HOST, SSH_PORT)
 FAILURE_SCORE = '--code-review=-2'
 FAILURE_MESSAGE = 'This commit message does not match the standard.' \
         + '  Please correct the commit message and upload a replacement patch.'
@@ -28,7 +28,7 @@ def main():
         opts, _args = getopt.getopt(sys.argv[1:], '', \
             ['change=', 'project=', 'branch=', 'commit=', 'patchset='])
     except getopt.GetoptError as err:
-        print('Error: %s' % (err))
+        print('Error: {0!s}'.format((err)))
         usage()
         sys.exit(-1)
 
@@ -44,7 +44,7 @@ def main():
         elif arg == '--patchset':
             patchset = value
         else:
-            print('Error: option %s not recognized' % (arg))
+            print('Error: option {0!s} not recognized'.format((arg)))
             usage()
             sys.exit(-1)
 
@@ -53,12 +53,11 @@ def main():
         usage()
         sys.exit(-1)
 
-    command = 'git cat-file commit %s' % (commit)
+    command = 'git cat-file commit {0!s}'.format((commit))
     status, output = subprocess.getstatusoutput(command)
 
     if status != 0:
-        print('Error running \'%s\'. status: %s, output:\n\n%s' % \
-            (command, status, output))
+        print('Error running \'{0!s}\'. status: {1!s}, output:\n\n{2!s}'.format(command, status, output))
         sys.exit(-1)
 
     commitMessage = output[(output.find('\n\n')+2):]
@@ -72,7 +71,7 @@ def main():
     for line in commitLines:
         i = i + 1
         if len(line) > 80:
-            fail(commit, 'Line %d is over 80 characters.' % i)
+            fail(commit, 'Line {0:d} is over 80 characters.'.format(i))
 
     passes(commit)
 

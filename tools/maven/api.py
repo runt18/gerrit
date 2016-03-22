@@ -53,13 +53,13 @@ while not path.exists(path.join(root, '.buckconfig')):
 
 if not args.dryrun:
   check_call('buck build api'.split())
-target = check_output(('buck targets --json api_%s' % args.action).split())
+target = check_output(('buck targets --json api_{0!s}'.format(args.action)).split())
 
 s = loads(target)[0]['cmd']
 
 fd, tempfile = mkstemp()
 s = s.replace('$(exe //tools/maven:mvn)', path.join(root, 'tools/maven/mvn.py'))
-s = s.replace('-o $OUT', '-o %s' % tempfile)
+s = s.replace('-o $OUT', '-o {0!s}'.format(tempfile))
 
 locations = locations()
 

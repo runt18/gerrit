@@ -245,5 +245,5 @@ try:
   out_file.close()
 except IOError as err:
   sys.stderr.write(
-      "error while expanding %s to %s: %s" % (options.src, options.out, err))
+      "error while expanding {0!s} to {1!s}: {2!s}".format(options.src, options.out, err))
   exit(1)

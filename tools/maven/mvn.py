@@ -40,37 +40,37 @@ if 'install' == args.a:
   cmd = [
     'mvn',
     'install:install-file',
-    '-Dversion=%s' % args.v,
+    '-Dversion={0!s}'.format(args.v),
   ]
 elif 'deploy' == args.a:
   cmd = [
     'mvn',
     'gpg:sign-and-deploy-file',
-    '-DrepositoryId=%s' % args.repository,
-    '-Durl=%s' % args.url,
+    '-DrepositoryId={0!s}'.format(args.repository),
+    '-Durl={0!s}'.format(args.url),
   ]
 else:
-  print("unknown action -a %s" % args.a, file=stderr)
+  print("unknown action -a {0!s}".format(args.a), file=stderr)
   exit(1)
 
 for spec in args.s:
   artifact, packaging_type, src = spec.split(':')
   exe = cmd + [
-    '-DpomFile=%s' % path.join(root, '%s/pom.xml' % artifact),
-    '-Dpackaging=%s' % packaging_type,
-    '-Dfile=%s' % src,
+    '-DpomFile={0!s}'.format(path.join(root, '{0!s}/pom.xml'.format(artifact))),
+    '-Dpackaging={0!s}'.format(packaging_type),
+    '-Dfile={0!s}'.format(src),
   ]
   try:
     if environ.get('VERBOSE'):
       print(' '.join(exe), file=stderr)
     check_output(exe)
   except Exception as e:
-    print('%s command failed: %s' % (args.a, e), file=stderr)
+    print('{0!s} command failed: {1!s}'.format(args.a, e), file=stderr)
     exit(1)
 
 with open(args.o, 'w') as fd:
   if args.repository:
-    print('Repository: %s' % args.repository, file=fd)
+    print('Repository: {0!s}'.format(args.repository), file=fd)
   if args.url:
-    print('URL: %s' % args.url, file=fd)
-  print('Version: %s' % args.v, file=fd)
+    print('URL: {0!s}'.format(args.url), file=fd)
+  print('Version: {0!s}'.format(args.v), file=fd)

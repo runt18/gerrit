@@ -30,7 +30,7 @@ import zipfile
 
 def _write_wct_conf(root, exports):
   with open(os.path.join(root, 'wct.conf.js'), 'w') as f:
-    f.write('module.exports = %s;\n' % json.dumps(exports))
+    f.write('module.exports = {0!s};\n'.format(json.dumps(exports)))
 
 
 def _wct_cmd():
@@ -70,7 +70,7 @@ class PolyGerritWctTests(unittest.TestCase):
     tmpdir, root = self._extract_resources()
 
     cmd = _wct_cmd()
-    print('Running %s in %s' % (cmd, root), file=sys.stderr)
+    print('Running {0!s} in {1!s}'.format(cmd, root), file=sys.stderr)
 
     _write_wct_conf(root, {
       'suites': ['test'],
