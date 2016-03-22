@@ -48,8 +48,8 @@ def main():
             usage()
             sys.exit(-1)
 
-    if change == None or project == None or branch == None \
-        or commit == None or patchset == None:
+    if change is None or project is None or branch is None \
+        or commit is None or patchset is None:
         usage()
         sys.exit(-1)
 
